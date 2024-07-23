@@ -1,5 +1,5 @@
 package test;
-
+import java.time.LocalDateTime;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
@@ -273,6 +273,9 @@ public class VendaDAOTest {
         produto.setDescricao("Produto 1");
         produto.setNome("Produto 1");
         produto.setValor(valor);
+        produto.setQuantidadeEstoque(10);
+        produto.setDataCriacao(LocalDateTime.now());
+        produto.setDataAtualizacao(produto.getDataCriacao());          
         produtoDao.cadastrar(produto);
         return produto;
     }

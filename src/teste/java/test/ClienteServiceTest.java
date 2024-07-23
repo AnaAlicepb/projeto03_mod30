@@ -15,7 +15,8 @@ import domain.Cliente;
 
 public class ClienteServiceTest {
     
-    private IClienteService clienteService;
+    
+	private IClienteService clienteService;
     private Cliente cliente;
 
     public ClienteServiceTest() {
@@ -24,9 +25,10 @@ public class ClienteServiceTest {
     }
 
     @Before
-    public void init() {
+    public void init() throws Exception{
         cliente = new Cliente();
         cliente.setCpf(12345678901L);
+        //cliente.setCpf( Math.round( Math.random()*1000));
         cliente.setNome("João da Silva");
         cliente.setCidade("São Paulo");
         cliente.setEndereco("Rua A");
@@ -35,6 +37,7 @@ public class ClienteServiceTest {
         cliente.setTelefone(11999999999L);
         cliente.setIdade(30L);
         cliente.setEmail("joao.silva@example.com");
+        clienteService.excluir(cliente.getCpf());
     }
 
     @Test
@@ -61,6 +64,7 @@ public class ClienteServiceTest {
 
     @Test
     public void alterarCliente() throws ExceptionTipoChaveNaoEncontrada, ExceptionDao {
+    	
         clienteService.cadastrar(cliente); // Certifique-se de que o cliente foi cadastrado antes de alterar
         cliente.setNome("João da Silva Jr.");
         clienteService.alterar(cliente);
