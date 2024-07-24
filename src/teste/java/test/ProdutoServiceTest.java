@@ -10,6 +10,7 @@ import services.ProdutoService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,8 +39,14 @@ public class ProdutoServiceTest {
         produto.setDataAtualizacao(LocalDateTime.now());
     }
 
+    @After
+    public void tearDown() throws ExceptionDao {
+        produtoService.excluir(produto.getCodigo());
+    }
+
     @Test
-    public void pesquisar() throws ExceptionDao {
+    public void pesquisar() throws ExceptionDao, ExceptionTipoChaveNaoEncontrada {
+        produtoService.cadastrar(produto);
         Produto produtoConsultado = this.produtoService.consultar(produto.getCodigo());
         Assert.assertNotNull(produtoConsultado);
     }
@@ -51,15 +58,20 @@ public class ProdutoServiceTest {
     }
 
     @Test
-    public void excluir() throws ExceptionDao {
+    public void excluir() throws ExceptionDao, ExceptionTipoChaveNaoEncontrada {
+        produtoService.cadastrar(produto);
         produtoService.excluir(produto.getCodigo());
+        Produto produtoConsultado = this.produtoService.consultar(produto.getCodigo());
+        Assert.assertNull(produtoConsultado);
     }
 
     @Test
     public void alterarProduto() throws ExceptionTipoChaveNaoEncontrada, ExceptionDao {
+        produtoService.cadastrar(produto);
         produto.setNome("Produto Teste Alterado");
         produtoService.alterar(produto);
         
-        Assert.assertEquals("Produto Teste Alterado", produto.getNome());
+        Produto produtoAlterado = this.produtoService.consultar(produto.getCodigo());
+        Assert.assertEquals("Produto Teste Alterado", produtoAlterado.getNome());
     }
 }
